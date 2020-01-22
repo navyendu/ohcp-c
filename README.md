@@ -2,33 +2,33 @@
 
 Reference implementation of OHCP in C
 
-    int build_adder(module * m) {
-        node * a = module_create_port("a", PORT_IN, type_array(logic, WIDTH));      // Add a port to the module
-        node * b = module_create_port("b", PORT_IN, type_array(logic, WIDTH));
-        node * c;
+    int build_adder(ohcp_module* m) {
+        node* a = ohcp_module_create_port(m, ohcp_type_vector(4, ohcp_logic), OHCP_PORT_IN, "a");   // Add a port to the module
+        node* b = ohcp_module_create_port(m, ohcp_type_vector(4, ohcp_logic), OHCP_PORT_IN, "b");
+        node* c;
         if (add_3) {                                            // Conditionally add port
-            c = module_create_port("b", PORT_IN, type_array(logic, WIDTH));
+            c = ohcp_module_create_port(m, ohcp_logic, OHCP_PORT_IN, "c");
         }
-        node * o = module_create_port("o", PORT_OUT, type_array(logic, WIDTH));
+        node* o = module_create_port("o", PORT_OUT, type_array(logic, WIDTH));
         
         if (add_3) {
-            expr_add3(o, a, b, c);
+            ohcp_assign(o, expr_add3(a, b, c));
         } else {
-            expr_add2(o, a, b);
+            ohcp_assign(o, expr_add2(a, b));
         }
         
         return 0;
     }
     
-    module_descr adder = {
+    ohcp_module_descr adder = {
         .build = build_adder
     }
     
     int main() {
-        module * a0 = module_create(adder, "a0");
+        ohcp_module* a0 = ohcp_module_create(adder, "a0");
         
-        synthesize(a0);
-        dump_sysverilog(a0, "file.sv");
+        ohcp_synthesize(a0);
+        ohcp_dump_sv(a0, "file.sv");
     }
 
 ## Acknowledgments
