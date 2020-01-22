@@ -3,13 +3,13 @@
 Reference implementation of OHCP in C
 
     int build_adder(ohcp_module* m) {
-        node* a = ohcp_module_create_port(m, ohcp_type_vector(4, ohcp_logic), OHCP_PORT_IN, "a");   // Add a port to the module
-        node* b = ohcp_module_create_port(m, ohcp_type_vector(4, ohcp_logic), OHCP_PORT_IN, "b");
-        node* c;
+        ohcp_node* a = ohcp_module_create_port(m, ohcp_type_vector(4, ohcp_logic), OHCP_PORT_IN, "a");   // Add a port to the module
+        ohcp_node* b = ohcp_module_create_port(m, ohcp_type_vector(4, ohcp_logic), OHCP_PORT_IN, "b");
+        ohcp_node* c;
         if (add_3) {                                            // Conditionally add port
             c = ohcp_module_create_port(m, ohcp_logic, OHCP_PORT_IN, "c");
         }
-        node* o = module_create_port("o", PORT_OUT, type_array(logic, WIDTH));
+        ohcp_node* o = module_create_port("o", PORT_OUT, type_array(logic, WIDTH));
         
         if (add_3) {
             ohcp_assign(o, expr_add3(a, b, c));
